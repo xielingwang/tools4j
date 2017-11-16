@@ -18,4 +18,12 @@ public class Hex {
         }
         return new String(chars);
     }
+
+    public static String format(byte[] data, boolean isLowerCase) {
+        return isLowerCase ? format(data).toLowerCase() : format(data);
+    }
+
+    public static String format(byte data, boolean isLowerCase) {
+        return isLowerCase ? format(data).toLowerCase() : format(data);
+    }
 }
