@@ -11,4 +11,8 @@ public abstract class Coder {
     public static B64 b64() {
         return b64(null);
     }
+
+    public static String mdx_16(String mdstr) {
+        return mdstr.substring(8, 24);
+    }
 }
