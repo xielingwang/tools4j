@@ -172,10 +172,5 @@ public class Hmac {
         public <T, S> String sha512(T data, S secrect) {
             return algorithm(ALGO_HmacSHA512).hash(data, secrect);
         }
-
-        @Override
-        public String toString() {
-            return hash();
-        }
     }
 }

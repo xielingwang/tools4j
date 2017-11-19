@@ -6,58 +6,82 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class B64Test {
+    static final Map<String, String> utf8 = new HashMap<>();
+    static final Map<String, String> gbk = new HashMap<>();
+
+    static {
+        utf8.put("中华人民共和国", "5Lit5Y2O5Lq65rCR5YWx5ZKM5Zu9");
+        utf8.put("国和共民人华中Encode to Base64 format", "5Zu95ZKM5YWx5rCR5Lq65Y2O5LitRW5jb2RlIHRvIEJhc2U2NCBmb3JtYXQ=");
+
+        gbk.put("中华人民共和国", "1tC7qsjLw/G5srrNufo=");
+        gbk.put("国和共民人华中Encode to Base64 format", "ufq6zbmyw/HIy7uq1tBFbmNvZGUgdG8gQmFzZTY0IGZvcm1hdA==");
+    }
 
     @Test
     public void testEncodeString() throws UnsupportedEncodingException {
         // encode(string), 默认 utf-8
-        Assert.assertEquals("5Lit5Y2O5Lq65rCR5YWx5ZKM5Zu9", Coder.b64().encodeAsStr("中华人民共和国"));
-        Assert.assertEquals("5Zu95ZKM5YWx5rCR5Lq65Y2O5LitRW5jb2RlIHRvIEJhc2U2NCBmb3JtYXQ=", Coder.b64().encodeAsStr("国和共民人华中Encode to Base64 format"));
-
+        for (String orig : utf8.keySet()) {
+            Assert.assertEquals(utf8.get(orig), Coder.b64().encodeAsStr(orig));
+        }
         // encode(string), gbk
-        Assert.assertEquals("1tC7qsjLw/G5srrNufo=", Coder.b64("gbk").encodeAsStr("中华人民共和国"));
-        Assert.assertEquals("ufq6zbmyw/HIy7uq1tBFbmNvZGUgdG8gQmFzZTY0IGZvcm1hdA==", Coder.b64("gbk").encodeAsStr("国和共民人华中Encode to Base64 format"));
-
+        for (String orig : gbk.keySet()) {
+            Assert.assertEquals(gbk.get(orig), Coder.b64("gbk").encodeAsStr(orig));
+        }
         // encoding 不一致, base64不一致
-        Assert.assertNotEquals("5Lit5Y2O5Lq65rCR5YWx5ZKM5Zu9", Coder.b64("gbk").encodeAsStr("中华人民共和国"));
-        Assert.assertNotEquals("5Zu95ZKM5YWx5rCR5Lq65Y2O5LitRW5jb2RlIHRvIEJhc2U2NCBmb3JtYXQ=", Coder.b64("gbk").encodeAsStr("国和共民人华中Encode to Base64 format"));
+        for (String orig : gbk.keySet()) {
+            Assert.assertNotEquals(utf8.get(orig), Coder.b64("gbk").encodeAsStr(orig));
+        }
     }
 
     @Test
     public void testDecodeString() throws UnsupportedEncodingException {
-        // decode(string), 默认 utf-8
-        Assert.assertEquals("中华人民共和国", Coder.b64().decodeAsStr("5Lit5Y2O5Lq65rCR5YWx5ZKM5Zu9"));
-        Assert.assertEquals("国和共民人华中Encode to Base64 format", Coder.b64().decodeAsStr("5Zu95ZKM5YWx5rCR5Lq65Y2O5LitRW5jb2RlIHRvIEJhc2U2NCBmb3JtYXQ="));
-
-        // decode(string), gbk
-        Assert.assertEquals("中华人民共和国", Coder.b64("gbk").decodeAsStr("1tC7qsjLw/G5srrNufo="));
-        Assert.assertEquals("国和共民人华中Encode to Base64 format", Coder.b64("gbk").decodeAsStr("ufq6zbmyw/HIy7uq1tBFbmNvZGUgdG8gQmFzZTY0IGZvcm1hdA=="));
+        // encode(string), 默认 utf-8
+        for (String orig : utf8.keySet()) {
+            Assert.assertEquals(orig, Coder.b64().decodeAsStr(utf8.get(orig)));
+        }
+        // encode(string), gbk
+        for (String orig : gbk.keySet()) {
+            Assert.assertEquals(orig, Coder.b64("gbk").decodeAsStr(gbk.get(orig)));
+        }
     }
 
     @Test
     public void testEncodeBytes() throws UnsupportedEncodingException {
         // encode(bytes), encode
-        Assert.assertEquals(
-                "5Lit5Y2O5Lq65rCR5YWx5ZKM5Zu9"
-                , Coder.b64().encodeAsStr("中华人民共和国".getBytes("utf-8"))
-        );
+        for (String orig : utf8.keySet()) {
+            Assert.assertEquals(
+                    utf8.get(orig)
+                    , Coder.b64().encodeAsStr(orig.getBytes("utf-8"))
+            );
+        }
         // encode(bytes), gbk
-        Assert.assertEquals(
-                "1tC7qsjLw/G5srrNufo="
-                , Coder.b64("gbk").encodeAsStr("中华人民共和国".getBytes("gbk"))
-        );
+        for (String orig : gbk.keySet()) {
+            Assert.assertEquals(
+                    gbk.get(orig)
+                    , Coder.b64("gbk").encodeAsStr(orig.getBytes("gbk"))
+            );
+        }
     }
 
     @Test
     public void testDecodeBytes() throws UnsupportedEncodingException {
-        Assert.assertEquals(
-                Hex.format("中华人民共和国".getBytes())
-                , Hex.format(Coder.b64().decodeAsBytes("5Lit5Y2O5Lq65rCR5YWx5ZKM5Zu9"))
-        );
-        Assert.assertEquals(
-                Hex.format("中华人民共和国".getBytes("gbk"))
-                , Hex.format(Coder.b64().decodeAsBytes("1tC7qsjLw/G5srrNufo="))
-        );
+        // encode(bytes), encode
+        for (String orig : utf8.keySet()) {
+            Assert.assertEquals(
+                    Hex.format(orig.getBytes())
+                    , Hex.format(Coder.b64().decodeAsBytes(utf8.get(orig)))
+            );
+        }
+        // encode(bytes), gbk
+        for (String orig : gbk.keySet()) {
+            Assert.assertEquals(
+                    Hex.format(orig.getBytes("gbk"))
+                    , Hex.format(Coder.b64().decodeAsBytes(gbk.get(orig)))
+            );
+        }
     }
 }

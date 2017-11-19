@@ -167,10 +167,5 @@ public class Hasher {
         public <T> String sha512(T data) {
             return algorithm(ALGO_SHA512).hash(data);
         }
-
-        @Override
-        public String toString() {
-            return hash();
-        }
     }
 }

@@ -16,6 +16,7 @@ public class HexTest {
         for (int i = 0; i < bytes.length; i ++) {
             byte b = bytes[i];
             assertEquals(hexStrs[i], Hex.format(b));
+            assertEquals(hexStrs[i].toLowerCase(), Hex.format(b, true));
         }
     }
 
