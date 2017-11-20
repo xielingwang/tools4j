@@ -2,6 +2,7 @@ package cn.tjitech.crypto;
 
 import org.junit.Test;
 
+import javax.crypto.SecretKey;
 import java.io.UnsupportedEncodingException;
 
 import static org.junit.Assert.*;
@@ -115,5 +116,20 @@ public class HmacTest {
 
         // upper case
         assertEquals("6CD2F4ED298A58DC98819C8A49D54FB2", Hmac.hasher().lowercase(false).md2(oriVal, key));
+    }
+
+    @Test
+    public void testHmacKey() {
+        assertNotNull("HmacKey.md2()", HmacKey.md2());
+        assertNotNull("HmacKey.md4()", HmacKey.md4());
+        assertNotNull("HmacKey.md5()", HmacKey.md5());
+
+        assertNotNull("HmacKey.sha1()", HmacKey.sha1());
+        assertNotNull("HmacKey.sha224()", HmacKey.sha224());
+        assertNotNull("HmacKey.sha384()", HmacKey.sha384());
+        assertNotNull("HmacKey.sha512()", HmacKey.sha512());
+
+        String keystring = HmacKey.sha512AsB64();
+        assertNotNull("Hmac.hasher().sha512()", Hmac.hasher().sha512(oriVal, Coder.b64().decodeAsBytes(keystring)));
     }
 }
