@@ -3,7 +3,6 @@ package cn.tjitech.crypto;
 import cn.tjitech.transform.Hex;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
@@ -104,21 +103,6 @@ public class Hasher {
         private boolean islowercase = true;
         private Object data = null;
 
-        private <T> byte[] bytelize(T data) {
-            byte[] result = null;
-            if (data instanceof byte[]) {
-                result = (byte[]) data;
-            } else if (data instanceof String) {
-                try {
-                    result = ((String) data).getBytes(encoding);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                    result = ((String) data).getBytes();
-                }
-            }
-            return result;
-        }
-
         public Digester algorithm(String val) {
             this.algorithm = val;
             return this;
@@ -135,7 +119,7 @@ public class Hasher {
         }
 
         public String hash() {
-            return Hasher.hash(algorithm, islowercase, bytelize(data));
+            return Hasher.hash(algorithm, islowercase, Coder.bytelize(data, encoding));
         }
 
         public <T> String hash(T data) {
