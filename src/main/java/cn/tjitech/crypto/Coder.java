@@ -1,17 +1,26 @@
 package cn.tjitech.crypto;
 
-import cn.tjitech.crypto.coder.B64;
+import cn.tjitech.crypto.coder.B32;
 import cn.tjitech.crypto.coder.B64Common;
+import cn.tjitech.crypto.coder.ICoder;
 
 import java.io.UnsupportedEncodingException;
 
 public abstract class Coder {
-    public static B64 b64(String encoding) {
+    public static ICoder b64(String encoding) {
         return new B64Common().setEncoding(encoding);
     }
 
-    public static B64 b64() {
-        return b64(null);
+    public static ICoder b64() {
+        return new B64Common();
+    }
+
+    public static ICoder b32(String encoding) {
+        return new B32().setEncoding(encoding);
+    }
+
+    public static ICoder b32() {
+        return new B32();
     }
 
     public static String mdx_16(String mdstr) {
