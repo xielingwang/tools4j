@@ -1,5 +1,6 @@
 package cn.tjitech.crypto;
 
+import cn.tjitech.transform.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Test;
 
@@ -27,6 +28,8 @@ public class HasherTest {
 
         assertEquals(DigestUtils.md5Hex(oriVal.getBytes("gbk")), Hasher.md5().enc("gbk").hash(oriVal));
         assertEquals(DigestUtils.md5Hex(oriVal.getBytes("gbk")), Hasher.md5(oriVal.getBytes("gbk")));
+
+        assertEquals(DigestUtils.md5Hex(oriVal.getBytes("gbk")), Hex.format(Hasher.md5AsBytes(oriVal.getBytes("gbk")), true));
     }
 
     @Test

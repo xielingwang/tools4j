@@ -6,6 +6,17 @@ apply plugin: 'idea'
 apply plugin: 'eclipse'
 
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
+    maven { url 'https://maven.aliyun.com/repository/jcenter' }
+    maven { url 'https://maven.aliyun.com/repository/central' }
+    maven { url 'https://jitpack.io' }
+    mavenLocal();
+    jcenter()
+    mavenCentral()
+}
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'

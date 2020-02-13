@@ -28,4 +28,29 @@ public class HexTest {
         String target = "00050A0F50555A5F70757A7F60656A6FFF";
         assertEquals(target, Hex.format(bytes));
     }
+
+    @Test
+    public void testParseByte() {
+        String[] origins = new String[] { "A1", "a1" };
+        for (String origin : origins) {
+            assertEquals((byte) 0xA1, Hex.parseByte(origin));
+        }
+    }
+
+    @Test
+    public void testParseBytes() {
+        String[] origins = new String[] { "A1A5B3", "a1a5b3", "A1A5b3" };
+        for (String origin : origins) {
+            assertArrayEquals(new byte[] {(byte) 0xA1, (byte) 0xA5, (byte) 0xB3}, Hex.parseBytes(origin));
+        }
+    }
+
+    @Test
+    public void testParseAndFormat() {
+        String[] origins = new String[] { "A1A5B3", "a1a5b3", "A1A5b3" };
+
+        for (String origin : origins) {
+            assertEquals(origin.toLowerCase(), Hex.format(Hex.parseBytes(origin), true));
+        }
+    }
 }

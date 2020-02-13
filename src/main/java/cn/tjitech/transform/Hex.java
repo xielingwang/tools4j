@@ -26,4 +26,28 @@ public class Hex {
     public static String format(byte data, boolean isLowerCase) {
         return isLowerCase ? format(data).toLowerCase() : format(data);
     }
+
+    public static byte parseByte(String hex){
+        if (hex == null || hex.length() <= 0) {
+            return 0x00;
+        }
+        return (byte) Integer.parseInt(hex,16);
+    }
+
+    public static byte[] parseBytes(String hex){
+        if (hex == null && hex.length() <= 0) {
+            return new byte[] {};
+        }
+
+        if (hex.length() % 2 == 1) {
+            hex = "0" + hex;
+        }
+
+        byte[] ret = new byte[hex.length() / 2];
+        for (int i = 0; i < hex.length(); i += 2) {
+            ret[i / 2] = parseByte(hex.substring(i, i + 2));
+        }
+
+        return ret;
+    }
 }

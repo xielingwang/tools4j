@@ -24,6 +24,10 @@ public class Hasher {
     private static final List<String> BCAlgorithms = Arrays.asList(ALGO_MD4, ALGO_SHA224);
 
     private static String hash(String algorithm, boolean islowercase, byte[] body) {
+        return Hex.format(hashAsBytes(algorithm, body), islowercase);
+    }
+
+    private static byte[] hashAsBytes(String algorithm, byte[] body) {
         if (BCAlgorithms.contains(algorithm)) {
             Provider bcProvider = Security.getProvider("BC");
             if (bcProvider == null) {
@@ -33,7 +37,7 @@ public class Hasher {
 
         try {
             MessageDigest digest = MessageDigest.getInstance(algorithm);
-            return Hex.format(digest.digest(body), islowercase);
+            return digest.digest(body);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -69,6 +73,9 @@ public class Hasher {
         return hasher().algorithm(ALGO_SHA512);
     }
 
+    /**
+     * hash as string
+     */
     public static <T> String md2(T data) {
         return md2().hash(data);
     }
@@ -95,9 +102,38 @@ public class Hasher {
     }
 
     /**
+     * hash as bytes
+     * @return
+     */
+    public static <T> byte[] md2AsBytes(T data) {
+        return md2().hashAsBytes(data);
+    }
+    public static <T> byte[] md4AsBytes(T data) {
+        return md4().hashAsBytes(data);
+    }
+    public static <T> byte[] md5AsBytes(T data) {
+        return md5().hashAsBytes(data);
+    }
+    public static <T> byte[] sha1AsBytes(T data) {
+        return sha1().hashAsBytes(data);
+    }
+    public static <T> byte[] sha224AsBytes(T data) {
+        return sha224().hashAsBytes(data);
+    }
+    public static <T> byte[] sha256AsBytes(T data) {
+        return sha256().hashAsBytes(data);
+    }
+    public static <T> byte[] sha384AsBytes(T data) {
+        return sha384().hashAsBytes(data);
+    }
+    public static <T> byte[] sha512AsBytes(T data) {
+        return sha512().hashAsBytes(data);
+    }
+
+    /**
      * Digester
      */
-    protected static class Digester {
+    public static class Digester {
         private String algorithm = ALGO_MD5;
         private String encoding = "utf-8";
         private boolean islowercase = true;
@@ -123,8 +159,17 @@ public class Hasher {
         }
 
         public <T> String hash(T data) {
+            return hashAsString(data);
+        }
+
+        public <T> String hashAsString(T data) {
             this.data = data;
             return hash();
+        }
+
+        public <T> byte[] hashAsBytes(T data) {
+            this.data = data;
+            return Hasher.hashAsBytes(algorithm, Coder.bytelize(data, encoding));
         }
 
         public <T> String md2(T data) {
